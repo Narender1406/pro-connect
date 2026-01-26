@@ -1,0 +1,392 @@
+body {
+  font-family: Arial,sans-serif;
+  background:#f5f7fb;
+  margin:0;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.layout {
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  gap: 20px;
+  padding: 20px;
+}
+
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.job-grid {
+  display :grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap:1.5rem;
+  padding:2rem;
+}
+.job-card{
+  background: white;
+  padding:1rem;
+  border-radius: 8px;
+}
+.filters {
+  display: flex;
+  gap:1rem;
+  padding: 0 2rem;
+}
+.filters input,
+.filters select{
+  padding :0.6rem;
+  border-radius: 6px;
+  border:1px solid #ccc;
+  width:100%;
+  max-width: 300px;
+}
+
+.feed {
+  max-width: 700px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.post-card, .create-post {
+  background: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+textarea, input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.comment {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+}
+
+.login-page {
+  height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f7fb;
+}
+
+.login-card {
+  background: white;
+  padding: 2rem;
+  width: 320px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.login-card h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 0.6rem;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.dark {
+  background: #0f172a;
+  min-height: 100vh;
+  color: #e5e7eb;
+}
+.dark a {
+  color: #e5e7eb;
+}
+.dark .theme-button {
+  background: #1e293b;
+  color: white;
+}
+.dark .navbar {
+  background: #020617;
+}
+
+.dark .login-card {
+  background: #020617;
+}
+* {
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+.profile-page {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.profile-card {
+  background: white;
+  padding: 24px;
+  width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.profile-card h2 {
+  margin-bottom: 4px;
+}
+
+.role {
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.skills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.skills li {
+  list-style: none;
+  background: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+
+/* ====== FORM CONTROLS FIX ====== */
+button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: #0a66c2;
+  color: white;
+}
+
+button:hover {
+  background: #004182;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #0a66c2;
+}
+
+
+
+/* PAGE WRAPPER */
+.feed-page {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  background: #f3f4f6;
+  padding-top: 20px;
+}
+
+/* LINKEDIN GRID */
+.feed-layout {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 240px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* SIDEBARS */
+.sidebar {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  position: sticky;
+  top: 80px;
+}
+.feed .post {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+/* MAIN FEED */
+.feed-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.login {
+  padding: 50px;
+  text-align: center;
+}
+
+/* POST CARD */
+.post-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* RESPONSIVE (LIKE LINKEDIN) */
+@media (max-width: 1024px) {
+  .feed-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
+.feed-main {
+  min-height: 300px;
+}
+
+.post-card h4 {
+  color: #0f172a;
+}
+
+.post-card p {
+  color: #334155;
+}
+
+.login-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: white;
+  padding: 30px;
+  width: 320px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-card input {
+  padding: 10px;
+  font-size: 14px;
+}
+
+.login-card button {
+  padding: 10px;
+  background: #0a66c2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.job-card {
+  background: white;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.applied {
+  color: green;
+  font-weight: bold;
+}
+.progress-bar {
+  width: 80%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #0a66c2;
+  border-radius: 10px;
+}
+.resume-btn {
+  margin-top: 55px;
+  background: #0a66c2;
+  color: white;
+  padding: 4px 4px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .job-card {
+    font-size: 14px;
+  }
+
+  nav {
+    flex-direction: column;
+  }
+}

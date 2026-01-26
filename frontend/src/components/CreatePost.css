@@ -1,0 +1,115 @@
+/* CareerTrack – Create Post */
+
+.create-post {
+  background: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.create-post:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.create-post__title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted, #6b7280);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* Textarea */
+.create-post__input {
+  width: 100%;
+  min-height: 90px;
+  resize: none;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background: transparent;
+  color: var(--text-primary, #111827);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.create-post__input::placeholder {
+  color: #9ca3af;
+}
+
+.create-post__input:focus {
+  outline: none;
+  border-color: var(--primary, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Footer */
+.create-post__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+}
+
+/* Helper text */
+.create-post__hint {
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+}
+
+/* Error */
+.create-post__error {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 0.4rem;
+}
+
+/* Button */
+.create-post__button {
+  background: linear-gradient(
+    135deg,
+    var(--primary, #6366f1),
+    #4f46e5
+  );
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.create-post__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+.create-post__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .create-post {
+    background: #111827;
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .create-post__input {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .create-post__input::placeholder {
+    color: #6b7280;
+  }
+}
