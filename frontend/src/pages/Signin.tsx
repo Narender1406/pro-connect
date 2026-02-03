@@ -19,7 +19,7 @@ const Signin = () => {
     setLoading(true);
 
     try {
-      const data = await loginAPI(email, password);
+      const data = await loginAPI({email, password});
 
       // save user + token globally
       login(data.user, data.token);

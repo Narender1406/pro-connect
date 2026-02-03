@@ -36,7 +36,7 @@ const ProfileEdit = () => {
     if (!token) return;
 
     try {
-      await updateProfile(token, {  Name , email } );
+      await updateProfile(token, {  name , email } );
       navigate("/feed");
     } catch (err) {
       console.error(err);

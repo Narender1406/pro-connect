@@ -1,62 +1,91 @@
 import { useEffect, useState } from "react";
-import CreatePost from "../components/CreatePost";
-import PostList from "../components/PostList";
-import PostSkeleton from "../components/PostSkeleton";
-import { fetchPosts } from "../api/post.api";
-import { useAuth } from "../context/AuthContext";
-import { Post } from "../types/posts";
+import "./Feed.css";
+import { getFeed, createPost } from "../api/post.api";
 
-const Feed = () => {
-  const { token } = useAuth();
-  
+interface Post {
+  _id: string;
+  content: string;
+  author?: {
+    name?: string;
+  };
+  createdAt: string;
+}
 
+export default function Feed() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      if (!token) return;
-
-      try {
-        setLoading(true);
-        const data = await fetchPosts(token);
-        setPosts(data);
-      } catch (err) {
-        console.error("Feed load error:", err);
-        setError("Unable to load feed. Please refresh.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPosts();
-  }, [token]);
-
-  const handlePostCreated = (post: Post) => {
-    setPosts((prev) => [post, ...prev]);
+  const loadFeed = async () => {
+    try {
+      setLoading(true);
+      const res = await getFeed();
+      setPosts(res || []);
+    } catch (err) {
+      setError("Unable to load feed. Please refresh.");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handlePost = async () => {
+    if (!content.trim()) return;
+
+    try {
+      await createPost({ content });
+      setContent("");
+      loadFeed();
+    } catch {
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    loadFeed();
+  }, []);
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
-      <CreatePost onPostCreated={handlePostCreated} />
+    <div className="feed-container">
+      {/* Post Composer */}
+      <div className="composer">
+        <h3>Share a career update</h3>
 
-      {loading && (
-        <div className="space-y-4">
-          <PostSkeleton />
-          <PostSkeleton />
+        <textarea
+          placeholder="Share an achievement, project update, or insight..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+
+        {error && <p className="error">{error}</p>}
+
+        <div className="composer-footer">
+          <span>Keep it professional & helpful</span>
+          <button onClick={handlePost}>Post</button>
         </div>
+      </div>
+
+      {/* Feed Content */}
+      {loading && <p className="status">Loading feed...</p>}
+
+      {!loading && posts.length === 0 && (
+        <p className="status">No posts yet. Be the first to share!</p>
       )}
 
-      {!loading && error && (
-        <p className="text-center text-sm text-red-500 mt-6">
-          {error}
-        </p>
-      )}
+      <div className="posts">
+        {posts.map((post) => (
+          <div className="post-card" key={post._id}>
+            <div className="post-header">
+              <strong>{post.author?.name || "Anonymous"}</strong>
+              <span>
+                {new Date(post.createdAt).toLocaleDateString()}
+              </span>
+            </div>
 
-      {!loading && !error && <PostList posts={posts} />}
+            <p className="post-content">{post.content}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default Feed;
+}

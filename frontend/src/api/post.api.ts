@@ -1,29 +1,11 @@
-import axiosInstance from "./axios";
-import { Post } from "../types/posts";
+import api from "./axios";
 
-export const createPost = async (
-  content: string,
-  token: string
-): Promise<Post> => {
-  const response = await axiosInstance.post(
-    "/api/posts",
-    { content },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  return response.data;
+export const getFeed = async () => {
+  const res = await api.get("/posts");
+  return res.data;
 };
 
-export const fetchPosts = async (token: string): Promise<Post[]> => {
-  const response = await axiosInstance.get("/api/posts", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.data;
+export const createPost = async (data: { content: string }) => {
+  const res = await api.post("/posts", data);
+  return res.data;
 };

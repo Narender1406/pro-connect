@@ -1,36 +1,35 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Signup from "./pages/Signup";
-import Signin from "./pages/Signin";
+import {  Routes, Route, Navigate } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+
 import Feed from "./pages/Feed";
-import ProfileEdit from "./pages/ProfileEdit";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Jobs from "./pages/Jobs";
+import Projects from "./pages/Projects";
+import Profile from "./pages/Profile";
 
-function App() {
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
+
+export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/signin" replace />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/signin" element={<Signin />} />
+  
+      <Routes>
+       
+        {/* Public routes */}
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
 
-      <Route
-        path="/feed"
-        element={
-          <ProtectedRoute>
-            <Feed />
-          </ProtectedRoute>
-        }
-      />
+        {/* Protected layout */}
+        <Route element={<MainLayout />}>
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
 
-      <Route
-        path="/profile/edit"
-        element={
-          <ProtectedRoute>
-            <ProfileEdit />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+        {/* Default */}
+        <Route path="*" element={<Navigate to="/feed" />} />
+
+      </Routes>
+    
   );
 }
-
-export default App;

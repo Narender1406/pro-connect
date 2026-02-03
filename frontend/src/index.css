@@ -390,3 +390,18 @@ input:focus, select:focus {
     flex-direction: column;
   }
 }
+:root {
+  --primary: #6366f1;
+  --nav-bg: #ffffff;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --border: #e5e7eb;
+}
+
+.dark {
+  --primary: #818cf8;
+  --nav-bg: #020617;
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --border: #1e293b;
+}

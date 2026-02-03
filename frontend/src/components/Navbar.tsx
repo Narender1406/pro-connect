@@ -1,12 +1,18 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme ,ThemeProvider  } from "../context/ThemeContext";
+import { Link , useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const { theme, toggleTheme } =  useTheme();
 
+   const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  };
   return (
     <nav className="navbar">
       <h2 className="logo">CareerTrack</h2>
