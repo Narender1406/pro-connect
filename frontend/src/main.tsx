@@ -6,9 +6,11 @@ import { AuthProvider } from "./context/AuthContext";
 import "./index.css";
 import "./components/theme.css";
 import { ThemeProvider } from "./context/ThemeContext";
+import { JobTrackerProvider } from "./context/JobTrackerContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <JobTrackerProvider>
     <BrowserRouter>
       <AuthProvider>
         <ThemeProvider>
@@ -16,5 +18,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
+    </JobTrackerProvider>
   </React.StrictMode>
 );

@@ -27,3 +27,29 @@ body {
   background: var(--card);
   color: var(--text);
 }
+* {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease;
+}
+/* light */
+:root {
+  --bg: #ffffff;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --hover: #f3f4f6;
+  --primary: #4f46e5;
+  --primary-soft: #eef2ff;
+}
+
+/* dark */
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --border: #1e293b;
+  --hover: #1e293b;
+  --primary: #818cf8;
+  --primary-soft: #1e1b4b;
+}

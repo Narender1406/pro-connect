@@ -1,91 +1,54 @@
 import { useEffect, useState } from "react";
-import "./Feed.css";
-import { getFeed, createPost } from "../api/post.api";
+import { getFeed } from "../api/post.api";
+import CreatePost from "../components/CreatePost";
+import PostCard from "../components/PostCard";
 
-interface Post {
-  _id: string;
-  content: string;
-  author?: {
-    name?: string;
-  };
-  createdAt: string;
-}
-
-export default function Feed() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [content, setContent] = useState("");
+const Feed = () => {
+  const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const loadFeed = async () => {
-    try {
-      setLoading(true);
-      const res = await getFeed();
-      setPosts(res || []);
-    } catch (err) {
-      setError("Unable to load feed. Please refresh.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePost = async () => {
-    if (!content.trim()) return;
-
-    try {
-      await createPost({ content });
-      setContent("");
-      loadFeed();
-    } catch {
-      setError("Something went wrong. Please try again.");
-    }
-  };
 
   useEffect(() => {
     loadFeed();
   }, []);
 
+  const loadFeed = async () => {
+    try {
+      const data = await getFeed();
+      setPosts(data);
+    } catch (err) {
+      console.error("Feed error", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="feed-container">
-      {/* Post Composer */}
-      <div className="composer">
-        <h3>Share a career update</h3>
+    <div style={styles.container}>
+      <div style={styles.feed}>
+        <CreatePost onPost={loadFeed} />
 
-        <textarea
-          placeholder="Share an achievement, project update, or insight..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-
-        {error && <p className="error">{error}</p>}
-
-        <div className="composer-footer">
-          <span>Keep it professional & helpful</span>
-          <button onClick={handlePost}>Post</button>
-        </div>
-      </div>
-
-      {/* Feed Content */}
-      {loading && <p className="status">Loading feed...</p>}
-
-      {!loading && posts.length === 0 && (
-        <p className="status">No posts yet. Be the first to share!</p>
-      )}
-
-      <div className="posts">
-        {posts.map((post) => (
-          <div className="post-card" key={post._id}>
-            <div className="post-header">
-              <strong>{post.author?.name || "Anonymous"}</strong>
-              <span>
-                {new Date(post.createdAt).toLocaleDateString()}
-              </span>
-            </div>
-
-            <p className="post-content">{post.content}</p>
-          </div>
-        ))}
+        {loading ? (
+          <p>Loading feed...</p>
+        ) : (
+          posts.map((post) => (
+            <PostCard key={post._id} post={post} />
+          ))
+        )}
       </div>
     </div>
   );
-}
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "30px 20px",
+  },
+  feed: {
+    width: "100%",
+    maxWidth: "600px",
+  },
+};
+
+export default Feed;

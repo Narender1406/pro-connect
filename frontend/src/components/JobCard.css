@@ -1,27 +1,78 @@
 .job-card {
-  background: rgb(185, 100, 100);
-  padding: 16px;
+  background: var(--card-bg, #fff);
   border-radius: 14px;
-  margin-bottom: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.job-card h3 {
-  margin: 0;
+.job-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.1);
 }
 
-.job-card p {
-  margin: 4px 0 0;
-  color: rgb(168, 51, 51);
-  font-size: 14px;
+.job-meta {
+  font-size: 13px;
+  color: #6b7280;
 }
 
-.job-card button {
+.job-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* STATUS BADGES */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+.status-badge.saved {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-badge.applied {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.interview {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* BUTTONS */
+.apply-btn {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
   border: none;
-  background: transparent;
+  padding: 8px 14px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 15px;
+}
+
+.save-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }

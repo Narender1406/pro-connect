@@ -5,7 +5,7 @@ export const getFeed = async () => {
   return res.data;
 };
 
-export const createPost = async (data: { content: string }) => {
-  const res = await api.post("/posts", data);
+export const createPost = async ( content: string ) => {
+  const res = await api.post("/posts", {content});
   return res.data;
 };

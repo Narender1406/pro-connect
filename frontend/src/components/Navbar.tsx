@@ -1,38 +1,89 @@
-import { NavLink } from "react-router-dom";
+// src/components/Navbar.tsx
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  FiHome,
+  FiLayers,
+  FiBriefcase,
+  FiUser,
+  FiSettings,
+  FiSun,
+  FiMoon,
+  FiLogOut,
+} from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
-import { useTheme ,ThemeProvider  } from "../context/ThemeContext";
-import { Link , useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const { theme, toggleTheme } =  useTheme();
 
-   const handleLogout = () => {
+  if (!user) return null;
+
+  const handleLogout = () => {
     logout();
     navigate("/signin");
   };
+
   return (
     <nav className="navbar">
-      <h2 className="logo">CareerTrack</h2>
+      {/* LEFT */}
+      <div className="nav-left">
+        <span className="logo" onClick={() => navigate("/feed")}>
+          CareerTrack
+        </span>
+      </div>
 
-      {user && (
-        <div className="nav-links">
-          <NavLink to="/feed">Feed</NavLink>
-          <NavLink to="/jobs">Jobs</NavLink>
-          <NavLink to="/projects">Projects</NavLink>
-          <NavLink to="/profile">Profile</NavLink>
+      {/* CENTER */}
+      <div className="nav-center">
+        <NavItem to="/feed" icon={<FiHome />} label="Feed" />
+        <NavItem to="/jobs" icon={<FiBriefcase />} label="Jobs" />
+        <NavItem to="/projects" icon={<FiLayers />} label="Projects" />
+        <NavItem to="/profile" icon={<FiUser />} label="Profile" />
+        <NavItem to="/settings" icon={<FiSettings />} label="Settings" />
+      </div>
 
-          <button className="theme-btn" onClick={toggleTheme}>
-            {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
-          </button>
+      {/* RIGHT */}
+      <div className="nav-right">
+        <button
+          className="icon-btn"
+          aria-label="Toggle theme"
+          onClick={toggleTheme}
+        >
+          {theme === "dark" ? <FiSun /> : <FiMoon />}
+        </button>
 
-          <button className="logout" onClick={logout}>
-            Logout
-          </button>
-        </div>
-      )}
+        <button
+          className="icon-btn danger"
+          aria-label="Logout"
+          onClick={handleLogout}
+        >
+          <FiLogOut />
+        </button>
+      </div>
     </nav>
+  );
+}
+
+/* ---------- Nav Item ---------- */
+
+type NavItemProps = {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+};
+
+function NavItem({ to, icon, label }: NavItemProps) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `nav-item ${isActive ? "active" : ""}`
+      }
+    >
+      <span className="nav-icon">{icon}</span>
+      <span className="nav-label">{label}</span>
+    </NavLink>
   );
 }

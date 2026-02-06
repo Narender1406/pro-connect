@@ -12,18 +12,18 @@ type ProfileForm = {
 
 export default function Profile() {
   const { user } = useAuth();
+
   const [form, setForm] = useState<ProfileForm>({
     name: "",
     bio: "",
     skills: "",
-    
   });
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch profile on load
+  /* ================= FETCH PROFILE ================= */
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -33,7 +33,7 @@ export default function Profile() {
           bio: data.bio || "",
           skills: data.skills || "",
         });
-      } catch (err) {
+      } catch {
         setError("Failed to load profile");
       } finally {
         setLoading(false);
@@ -43,6 +43,7 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
+  /* ================= HANDLERS ================= */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -55,87 +56,89 @@ export default function Profile() {
       setError("");
       await updateProfile(form);
       alert("Profile updated successfully ✅");
-    } catch (err) {
+    } catch {
       setError("Failed to update profile");
     } finally {
       setSaving(false);
     }
-    <ActivityTabs />
   };
 
-  if (loading) return <p style={{ padding: 20 }}>Loading profile...</p>;
+  if (loading) {
+    return <p style={{ padding: 20 }}>Loading profile...</p>;
+  }
 
+  /* ================= UI ================= */
   return (
-  
+    <div className="profile-wrapper">
+      {/* ===== PROFILE CARD ===== */}
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            {form.name?.charAt(0).toUpperCase() || "U"}
+          </div>
 
-<div className="profile-wrapper">
-  <div className="profile-card">
+          <div className="profile-title">
+            <h2>{form.name || "Your Profile"}</h2>
+            <p>{user?.email}</p>
+          </div>
+        </div>
 
-    <div className="profile-header">
-      <div className="profile-avatar">
-        {form.name?.charAt(0).toUpperCase() || "U"}
+        {error && <div className="profile-error">{error}</div>}
+
+        <div className="profile-section">
+          <label>Name</label>
+          <input
+            className="profile-input"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="profile-section">
+          <label>Bio</label>
+          <textarea
+            className="profile-textarea"
+            name="bio"
+            value={form.bio}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="profile-section">
+          <label>Skills (comma separated)</label>
+          <input
+            className="profile-input"
+            name="skills"
+            value={form.skills}
+            onChange={handleChange}
+          />
+
+          <div className="skills-container">
+            {form.skills
+              .split(",")
+              .filter(Boolean)
+              .map((skill, i) => (
+                <span key={i} className="skill-chip">
+                  {skill.trim()}
+                </span>
+              ))}
+          </div>
+        </div>
+
+        <button
+          className="profile-save-btn"
+          onClick={handleSave}
+          disabled={saving}
+        >
+          {saving ? "Saving..." : "Save Changes"}
+        </button>
       </div>
 
-      <div className="profile-title">
-        <h2>{form.name || "Your Profile"}</h2>
-        <p>{user?.email}</p>
+      {/* ===== ACTIVITY / JOB TRACKING ===== */}
+      <div className="profile-activity">
+        <ActivityTabs />
       </div>
     </div>
-
-    {error && <div className="profile-error">{error}</div>}
-
-    <div className="profile-section">
-      <label>Name</label>
-      <input
-        className="profile-input"
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-      />
-    </div>
-
-    <div className="profile-section">
-      <label>Bio</label>
-      <textarea
-        className="profile-textarea"
-        name="bio"
-        value={form.bio}
-        onChange={handleChange}
-      />
-    </div>
-
-    <div className="profile-section">
-      <label>Skills (comma separated)</label>
-      <input
-        className="profile-input"
-        name="skills"
-        value={form.skills}
-        onChange={handleChange}
-      />
-
-      <div className="skills-container">
-        {form.skills
-          .split(",")
-          .filter(Boolean)
-          .map((skill, i) => (
-            <span key={i} className="skill-chip">
-              {skill.trim()}
-            </span>
-          ))}
-      </div>
-    </div>
-
-    <button
-      className="profile-save-btn"
-      onClick={handleSave}
-      disabled={saving}
-    >
-      {saving ? "Saving..." : "Save Changes"}
-    </button>
-
-  </div>
-</div>
-
-         
-   
-  )};
+  );
+}

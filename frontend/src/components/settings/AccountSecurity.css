@@ -1,0 +1,185 @@
+/* ================================
+   Account Security – Professional UI
+   ================================ */
+
+.security-card {
+  background: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 680px;
+  margin: 0 auto;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  animation: securityFade 0.45s ease;
+}
+
+/* ---------- Header ---------- */
+.security-header {
+  margin-bottom: 28px;
+}
+
+.security-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin-bottom: 6px;
+}
+
+.security-header p {
+  font-size: 14px;
+  color: var(--text-muted, #6b7280);
+}
+
+/* ---------- Section ---------- */
+.security-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.security-section:last-child {
+  border-bottom: none;
+}
+
+/* ---------- Labels ---------- */
+.security-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary, #374151);
+}
+
+/* ---------- Inputs ---------- */
+.security-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #d1d5db);
+  font-size: 14px;
+  background: var(--input-bg, #ffffff);
+  color: var(--text-primary, #111827);
+  transition:
+    border 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.security-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ---------- Inline Actions ---------- */
+.security-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.security-action span {
+  font-size: 14px;
+  color: var(--text-secondary, #374151);
+}
+
+/* ---------- Buttons ---------- */
+.security-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.security-btn.primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+}
+
+.security-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+}
+
+.security-btn.secondary {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.security-btn.secondary:hover {
+  background: #e5e7eb;
+}
+
+.security-btn.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.security-btn.danger:hover {
+  background: #fecaca;
+}
+
+/* ---------- Animations ---------- */
+@keyframes securityFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Dark Mode ---------- */
+body.dark .security-card {
+  background: #0f172a;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    0 2px 4px rgba(255, 255, 255, 0.04);
+}
+
+body.dark .security-header h3 {
+  color: #e5e7eb;
+}
+
+body.dark .security-header p {
+  color: #94a3b8;
+}
+
+body.dark .security-label,
+body.dark .security-action span {
+  color: #cbd5f5;
+}
+
+body.dark .security-input {
+  background: #020617;
+  border-color: #1e293b;
+  color: #e5e7eb;
+}
+
+body.dark .security-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+body.dark .security-btn.secondary {
+  background: #1e293b;
+  color: #e5e7eb;
+}
+
+body.dark .security-btn.secondary:hover {
+  background: #334155;
+}
+
+body.dark .security-btn.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}

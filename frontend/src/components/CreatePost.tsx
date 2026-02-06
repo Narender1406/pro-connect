@@ -1,78 +1,61 @@
 import { useState } from "react";
 import { createPost } from "../api/post.api";
-import { useAuth } from "../context/AuthContext";
-import { Post } from "../types/posts";
-import "./CreatePost.css";
 
-interface CreatePostProps {
-  onPostCreated: (post: Post) => void;
-}
-
-const CreatePost = ({ onPostCreated }: CreatePostProps) => {
-  const { token } = useAuth();
- 
-
+const CreatePost = ({ onPost }: { onPost: () => void }) => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handlePost = async () => {
+  const submitPost = async () => {
     if (!content.trim()) return;
-
-    if (!token) {
-      setError("You must be logged in to post.");
-      return;
-    }
 
     try {
       setLoading(true);
-      setError("");
-
-      const newPost = await createPost(content.trim(), token);
-
-      onPostCreated(newPost);
+      await createPost(content);
       setContent("");
+      onPost();
     } catch (err) {
-      console.error("Create post failed:", err);
-      setError("Something went wrong. Please try again.");
+      alert("Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="create-post">
-      <h3 className="create-post__title">
-        Share a career update
-      </h3>
-
+    <div style={styles.card}>
       <textarea
-        className="create-post__input"
-        placeholder="What did you learn, build, or apply for today?"
+        placeholder="Start a post..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        disabled={loading}
+        style={styles.textarea}
       />
 
-      {error && (
-        <p className="create-post__error">{error}</p>
-      )}
-
-      <div className="create-post__footer">
-        <span className="create-post__hint">
-          Keep it professional & helpful
-        </span>
-
-        <button
-          className="create-post__button"
-          onClick={handlePost}
-          disabled={loading || !content.trim()}
-        >
+      <div style={styles.actions}>
+        <button onClick={submitPost} disabled={loading}>
           {loading ? "Posting..." : "Post"}
         </button>
       </div>
     </div>
   );
+};
+
+const styles = {
+  card: {
+    background: "#fff",
+    padding: "16px",
+    borderRadius: "8px",
+    marginBottom: "16px",
+  },
+  textarea: {
+    width: "100%",
+    border: "none",
+    outline: "none",
+    resize: "none" as const,
+    fontSize: "14px",
+  },
+  actions: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 };
 
 export default CreatePost;

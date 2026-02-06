@@ -1,14 +1,13 @@
-export const api = async (path: string, options: any = {}) => {
+import axios from "axios";
+
+export const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
+
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-
-  const res = await fetch(`http://localhost:5000/api${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token ? `Bearer ${token}` : ""
-    }
-  });
-
-  
-  return res.json();
-};
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});

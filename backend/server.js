@@ -6,6 +6,7 @@ import { configDotenv } from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import settingsRoutes from "./routes/settings.routes.js";
 
 configDotenv();
 
@@ -25,7 +26,8 @@ mongoose
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/posts", postRoutes); // ✅ NOW SAFE
+app.use("/api/posts", postRoutes);
+app.use("/api/settings", settingsRoutes); // ✅ NOW SAFE
 
 app.listen(5000, () => {
   console.log("🚀 Backend running");

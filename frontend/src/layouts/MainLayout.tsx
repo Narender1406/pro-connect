@@ -1,13 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-export default function MainLayout ()  {
+const MainLayout = () =>  {
   return (
     <>
       <Navbar />
-      <main style={{ padding: "20px" }}>
+      <main style={{ background: "#f3f2ef" , minHeight:"100vh"}}>
         <Outlet />
       </main>
     </>
   );
 }
+export default MainLayout;
