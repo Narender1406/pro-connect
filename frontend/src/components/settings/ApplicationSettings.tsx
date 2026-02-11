@@ -10,8 +10,19 @@ export default function ApplicationsSettings() {
   useEffect(() => {
     const loadApplications = async () => {
       try {
-        const data = await getApplications();
-        setApplications(data.data);
+        const res = await getApplications();
+
+        // ✅ ApiResponse<Application[]>
+        const apps = Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res)
+          ? res
+          : [];
+
+        setApplications(apps);
+      } catch (error) {
+        console.error("Failed to load applications", error);
+        setApplications([]);
       } finally {
         setLoading(false);
       }
@@ -40,7 +51,9 @@ export default function ApplicationsSettings() {
       ) : (
         applications.map((app) => (
           <div key={app._id} className="application-row">
-            <span>{app.jobTitle}</span>
+            {/* ✅ CANONICAL FIELD */}
+            <span>{app.jobTitle || "Untitled Role"}</span>
+
             <span className={`status ${app.status}`}>
               {app.status}
             </span>

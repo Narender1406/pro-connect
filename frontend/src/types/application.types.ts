@@ -11,5 +11,5 @@ export interface Application {
   role: string;
   location: string;
   status: ApplicationStatus;
-  appliedAt: string;
+  appliedAt?: string;
 }

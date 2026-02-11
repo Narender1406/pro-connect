@@ -1,75 +1,72 @@
 import { useEffect, useState } from "react";
-import { getMyPosts, getSavedJobs } from "../services/activity.api";
+import { getUserActivity } from "../api/activity.api";
+
+type Activity = {
+  _id: string;
+  title?: string;
+  description?: string;
+};
 
 type Post = {
   _id: string;
-  content: string;
-  createdAt: string;
-};
-
-type Job = {
-  _id: string;
   title: string;
-  company: string;
+  description?: string;
 };
 
-export default function ActivityTabs() {
-  const [tab, setTab] = useState<"posts" | "jobs">("posts");
+const ActivityTabs = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([getMyPosts(), getSavedJobs()])
-      .then(([postsRes, jobsRes]) => {
-        setPosts(postsRes || []);
-        setJobs(jobsRes || []);
-      })
-      .finally(() => setLoading(false));
+    const loadActivity = async () => {
+      try {
+        setLoading(true);
+        const res = await getUserActivity();
+
+        // ✅ STRICT ARRAY GUARD
+        const activities = Array.isArray(res?.data?.data)
+          ? res.data.data
+          : [];
+
+        const posts = activities
+          .filter((activity: Activity) => activity.title)
+          .map((activity: Activity) => ({
+            _id: activity._id,
+            title: activity.title || "",
+            description: activity.description,
+          }));
+
+        setPosts(posts);
+      } catch (err) {
+        console.error("Activity error:", err);
+        setError("Failed to load activity");
+        setPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadActivity();
   }, []);
 
   if (loading) return <p>Loading activity...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
-    <div className="activity-box">
-      <div className="activity-tabs">
-        <button
-          className={tab === "posts" ? "active" : ""}
-          onClick={() => setTab("posts")}
-        >
-          Posts
-        </button>
-        <button
-          className={tab === "jobs" ? "active" : ""}
-          onClick={() => setTab("jobs")}
-        >
-          Jobs
-        </button>
-      </div>
-
-      {tab === "posts" && (
-        <div>
-          {posts.length === 0 && <p>No posts yet</p>}
-          {posts.map((p) => (
-            <div key={p._id} className="activity-card">
-              <p>{p.content}</p>
-              <span>{new Date(p.createdAt).toLocaleDateString()}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {tab === "jobs" && (
-        <div>
-          {jobs.length === 0 && <p>No saved jobs</p>}
-          {jobs.map((j) => (
-            <div key={j._id} className="activity-card">
-              <h4>{j.title}</h4>
-              <p>{j.company}</p>
-            </div>
-          ))}
-        </div>
+    <div className="activity-list">
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <div key={post._id} className="activity-item">
+            <h4>{post.title}</h4>
+            {post.description && <p>{post.description}</p>}
+          </div>
+        ))
+      ) : (
+        <p className="empty-state">No activity found</p>
       )}
     </div>
   );
-}
+};
+
+export default ActivityTabs;

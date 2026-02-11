@@ -1,4 +1,4 @@
-import {  Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 
 import Feed from "./pages/Feed";
@@ -10,11 +10,12 @@ import Settings from "./pages/Settings/Settings";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 
+import ErrorBoundary from "./components/ErrorBoundary";
+
 export default function App() {
   return (
-  
+    <ErrorBoundary>
       <Routes>
-       
         {/* Public routes */}
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
@@ -30,8 +31,7 @@ export default function App() {
 
         {/* Default */}
         <Route path="*" element={<Navigate to="/feed" />} />
-
       </Routes>
-    
+    </ErrorBoundary>
   );
 }

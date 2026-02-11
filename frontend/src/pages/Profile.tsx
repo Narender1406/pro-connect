@@ -27,7 +27,8 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await getProfile();
+        const response = await getProfile();
+        const data = response.data;
         setForm({
           name: data.name || "",
           bio: data.bio || "",
