@@ -21,26 +21,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Load user safely on app start
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
+    try {
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
 
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
+      if (
+        storedUser &&
+        storedUser !== "undefined" &&
+        storedToken
+      ) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setToken(storedToken);
+      }
+    } catch (error) {
+      console.error("Failed to load auth data:", error);
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  const login = (userData: User, token: string) => {
+  // ✅ Login function
+  const login = (userData: User, tokenValue: string) => {
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", token);
+    localStorage.setItem("token", tokenValue);
+
     setUser(userData);
-    setToken(token);
+    setToken(tokenValue);
   };
 
+  // ✅ Logout function
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
     setUser(null);
     setToken(null);
   };
@@ -52,8 +70,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// ✅ Custom hook
 export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
 };

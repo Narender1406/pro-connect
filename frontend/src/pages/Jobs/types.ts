@@ -1,10 +1,11 @@
 export type Job = {
-  id: string;
+  id: number;
   title: string;
   company: string;
   location: string;
   salary: string;
   experience: string;
-  type: "Full Time" | "Part Time";
+  type: string,
   remote: boolean;
+  postedAt: boolean;
 };

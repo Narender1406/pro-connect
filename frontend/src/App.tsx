@@ -16,11 +16,11 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Routes>
-        {/* Public routes */}
+        {/* Public Routes */}
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected layout */}
+        {/* Protected Routes inside Layout */}
         <Route element={<MainLayout />}>
           <Route path="/feed" element={<Feed />} />
           <Route path="/jobs" element={<Jobs />} />
@@ -29,8 +29,8 @@ export default function App() {
           <Route path="/settings" element={<Settings />} />
         </Route>
 
-        {/* Default */}
-        <Route path="*" element={<Navigate to="/feed" />} />
+        {/* Default Redirect */}
+        <Route path="*" element={<Navigate to="/feed" replace />} />
       </Routes>
     </ErrorBoundary>
   );

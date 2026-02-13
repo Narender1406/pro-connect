@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -5,11 +6,13 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // TEMP (replace with API later)
+    const res = await axios.post("http://localhost:5000/api/auth/login",
+      {"email,password": ""});
     login(
-      { _id: "1", name: "Yash", email: "yash@test.com" },
-      "fake-jwt-token"
+       res.data.user , res.data.token_ ,
+      
     );
     navigate("/feed");
   };

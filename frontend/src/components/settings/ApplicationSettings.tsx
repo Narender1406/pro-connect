@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getApplications } from "../../services/settings.api";
-import Skeleton from "../ui/Skeleton";
-import { Application } from "../../types/application.types";
+import { getApplications } from "../../services/settings.api.js";
+import Skeleton from "../ui/Skeleton.js";
+import type { Application } from "../../types/application.types.js";
 
 export default function ApplicationsSettings() {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -52,7 +52,7 @@ export default function ApplicationsSettings() {
         applications.map((app) => (
           <div key={app._id} className="application-row">
             {/* ✅ CANONICAL FIELD */}
-            <span>{app.jobTitle || "Untitled Role"}</span>
+            <span>{app.role || "Untitled Role"}</span>
 
             <span className={`status ${app.status}`}>
               {app.status}

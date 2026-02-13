@@ -18,7 +18,17 @@ export const createPost = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
+}; 
+
+export const getPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch posts" });
+  }
 };
+
 
 export const getFeed = async (req, res) => {
   try {

@@ -1,11 +1,26 @@
 import api from "./axios";
 
 export const getFeed = async () => {
-  const res = await api.get("/posts");
+const token = localStorage.getItem("token");
+
+  const res = await api.get("/posts" , {
+    headers:{
+      Authorization:`Bearer ${token}`,
+    },
+  });
   return res.data;
 };
 
 export const createPost = async ( content: string ) => {
-  const res = await api.post("/posts", {content});
+  const token = localStorage.getItem("token");
+
+
+  const res = await api.post("/posts", {content},
+  {
+    headers:{
+      Authorization:`Bearer ${token}`,
+    },
+  }
+);
   return res.data;
 };

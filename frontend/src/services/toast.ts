@@ -1,5 +1,5 @@
-import toast from "react-hot-toast";
-import { ApiError } from "./error";
+import { toast } from "react-hot-toast";
+import type { ApiError } from "./error.js";
 
 export const showSuccess = (message: string) => {
   toast.success(message);

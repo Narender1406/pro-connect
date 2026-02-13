@@ -1,6 +1,6 @@
-import { Post } from "../types/posts";
+import { Posts } from "../types/posts";
 
-const PostCard = ({ post }: any) => {
+const PostCard = ({ post }: { post: Posts }) => {
   return (
     <div style={styles.card}>
       <h4 style={styles.author}>{post.author?.name || "User"}</h4>
