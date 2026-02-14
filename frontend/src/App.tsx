@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import MainLayout from "./layouts/MainLayout";
 
 import Feed from "./pages/Feed";
@@ -13,15 +14,33 @@ import Signup from "./pages/Signup";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 export default function App() {
+  const { user } = useAuth();
+
   return (
     <ErrorBoundary>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
+        {/* Default Route */}
+        <Route
+          path="/"
+          element={
+            user ? <Navigate to="/feed" replace /> : <Navigate to="/signin" replace />
+          }
+        />
 
-        {/* Protected Routes inside Layout */}
-        <Route element={<MainLayout />}>
+        {/* Public Routes */}
+        <Route
+          path="/signin"
+          element={user ? <Navigate to="/feed" replace /> : <Signin />}
+        />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/feed" replace /> : <Signup />}
+        />
+
+        {/* Protected Routes */}
+        <Route
+          element={user ? <MainLayout /> : <Navigate to="/signin" replace />}
+        >
           <Route path="/feed" element={<Feed />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/projects" element={<Projects />} />
@@ -29,8 +48,8 @@ export default function App() {
           <Route path="/settings" element={<Settings />} />
         </Route>
 
-        {/* Default Redirect */}
-        <Route path="*" element={<Navigate to="/feed" replace />} />
+        {/* Catch All */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </ErrorBoundary>
   );
