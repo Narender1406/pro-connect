@@ -7,11 +7,14 @@ import Jobs from "./pages/Jobs/Jobs";
 import Projects from "./pages/Projects";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings/Settings";
+import Messages from "./pages/Messages";
+import Analytics from "./pages/Analytics";
 
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 
 import ErrorBoundary from "./components/ErrorBoundary";
+import "./styles/globals.css";
 
 export default function App() {
   const { user } = useAuth();
@@ -19,7 +22,6 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Routes>
-        {/* Default Route */}
         <Route
           path="/"
           element={
@@ -27,7 +29,6 @@ export default function App() {
           }
         />
 
-        {/* Public Routes */}
         <Route
           path="/signin"
           element={user ? <Navigate to="/feed" replace /> : <Signin />}
@@ -37,18 +38,18 @@ export default function App() {
           element={user ? <Navigate to="/feed" replace /> : <Signup />}
         />
 
-        {/* Protected Routes */}
         <Route
           element={user ? <MainLayout /> : <Navigate to="/signin" replace />}
         >
           <Route path="/feed" element={<Feed />} />
           <Route path="/jobs" element={<Jobs />} />
+          <Route path="/messages" element={<Messages />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
 
-        {/* Catch All */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </ErrorBoundary>

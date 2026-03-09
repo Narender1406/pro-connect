@@ -1,9 +1,5 @@
-import { api } from "./api";
+import api from "../api/axios";
 
-export const getProfile = () => api("/users/me");
+export const getProfile = () => api.get("/users/profile");
 
-export const updateProfile = (data: any) =>
-  api("/users/update", {
-    method: "PUT",
-    body: JSON.stringify(data),
-  });
+export const updateProfile = (data: any) => api.put("/users/profile", data);

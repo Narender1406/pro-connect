@@ -1,5 +1,5 @@
 import express from "express";
-import User from "../models/User.model.js";
+import { getProfile, updateProfile, updateEmail, updatePassword, updatePhone, deleteAccount, updateSettings, addProject, deleteProject, getAnalytics } from "../controllers/user.controller.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
@@ -10,26 +10,22 @@ const auth = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+    req.user = { id: decoded.id };
     next();
   } catch {
     res.sendStatus(401);
   }
 };
 
-router.get("/profile", auth, async (req, res) => {
-  const user = await User.findById(req.userId).select("-password");
-  res.json(user);
-});
-
-router.put("/profile", auth, async (req, res) => {
-  const user = await User.findByIdAndUpdate(
-    req.userId,
-    req.body,
-    { new: true }
-  ).select("-password");
-
-  res.json(user);
-});
+router.get("/profile", auth, getProfile);
+router.put("/profile", auth, updateProfile);
+router.patch("/email", auth, updateEmail);
+router.patch("/password", auth, updatePassword);
+router.patch("/phone", auth, updatePhone);
+router.delete("/account", auth, deleteAccount);
+router.patch("/settings", auth, updateSettings);
+router.post("/projects", auth, addProject);
+router.delete("/projects/:id", auth, deleteProject);
+router.get("/analytics", auth, getAnalytics);
 
 export default router;

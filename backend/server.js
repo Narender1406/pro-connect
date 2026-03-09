@@ -4,54 +4,49 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.routes.js";
-import postRoutes from "./routes/post.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import jobRoutes from "./routes/jobs.routes.js";
+import postRoutes from "./routes/posts.routes.js";
+import connectionRoutes from "./routes/connection.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
+import messageRoutes from "./routes/message.routes.js";
+import searchRoutes from "./routes/search.routes.js";
 
 dotenv.config();
 
 const app = express();
 
-/* =========================
-   ✅ MIDDLEWARE (ORDER MATTERS)
-========================= */
-
-// Body parser
 app.use(express.json());
 
-// ✅ CORS must come BEFORE routes
 app.use(
   cors({
-    origin: [ "http://localhost:5173",
-    "https://pro-connect.vercel.app"
+    origin: [
+      "http://localhost:5173",
+      "https://pro-connect.vercel.app"
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// ✅ Handle preflight requests
 app.options("*", cors());
 
-/* =========================
-   ✅ ROUTES
-========================= */
-
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/jobs", jobRoutes);
 app.use("/api/posts", postRoutes);
-
-/* =========================
-   ✅ DATABASE CONNECTION
-========================= */
+app.use("/api/connections", connectionRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/search", searchRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ Mongo Error:", err));
 
-/* =========================
-   ✅ SERVER START
-========================= */
-
-app.listen(5000, () => {
-  console.log("🔥 Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🔥 Server running on port ${PORT}`);
 });

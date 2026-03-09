@@ -1,47 +1,27 @@
 import { useEffect, useState } from "react";
-import { getUserActivity } from "../api/activity.api";
+import { jobAPI } from "../api/job.api";
 
-type Activity = {
-  _id: string;
-  title?: string;
-  description?: string;
-};
-
-type Post = {
+type Application = {
   _id: string;
   title: string;
-  description?: string;
+  company: string;
+  applicationStatus: string;
+  appliedAt: string;
 };
 
 const ActivityTabs = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadActivity = async () => {
       try {
         setLoading(true);
-        const res = await getUserActivity();
-
-        // ✅ STRICT ARRAY GUARD
-        const activities = Array.isArray(res?.data?.data)
-          ? res.data.data
-          : [];
-
-        const posts = activities
-          .filter((activity: Activity) => activity.title)
-          .map((activity: Activity) => ({
-            _id: activity._id,
-            title: activity.title || "",
-            description: activity.description,
-          }));
-
-        setPosts(posts);
+        const data = await jobAPI.getMyApplications();
+        setApplications(data || []);
       } catch (err) {
         console.error("Activity error:", err);
-        setError("Failed to load activity");
-        setPosts([]);
+        setApplications([]);
       } finally {
         setLoading(false);
       }
@@ -50,20 +30,37 @@ const ActivityTabs = () => {
     loadActivity();
   }, []);
 
-  if (loading) return <p>Loading activity...</p>;
-  if (error) return <p className="error">{error}</p>;
+  if (loading) return <p style={{ padding: "1rem", color: "#94a3b8" }}>Loading activity...</p>;
 
   return (
-    <div className="activity-list">
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <div key={post._id} className="activity-item">
-            <h4>{post.title}</h4>
-            {post.description && <p>{post.description}</p>}
+    <div className="activity-list" style={{ padding: "1rem" }}>
+      <h3 style={{ color: "#f1f5f9", marginBottom: "1rem" }}>Recent Applications</h3>
+      {applications.length > 0 ? (
+        applications.map((app) => (
+          <div key={app._id} style={{
+            padding: "1rem",
+            background: "linear-gradient(135deg, #1e293b, #0f172a)",
+            border: "1px solid #334155",
+            borderRadius: "8px",
+            marginBottom: "0.75rem"
+          }}>
+            <h4 style={{ color: "#f1f5f9", margin: "0 0 0.5rem" }}>{app.title}</h4>
+            <p style={{ color: "#94a3b8", margin: "0 0 0.5rem", fontSize: "0.875rem" }}>{app.company}</p>
+            <span style={{
+              display: "inline-block",
+              padding: "0.25rem 0.75rem",
+              background: "#2563eb",
+              color: "white",
+              borderRadius: "12px",
+              fontSize: "0.8125rem",
+              fontWeight: "600"
+            }}>
+              {app.applicationStatus}
+            </span>
           </div>
         ))
       ) : (
-        <p className="empty-state">No activity found</p>
+        <p style={{ color: "#64748b", textAlign: "center", padding: "2rem" }}>No applications yet</p>
       )}
     </div>
   );

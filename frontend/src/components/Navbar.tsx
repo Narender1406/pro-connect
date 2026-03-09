@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FiHome,
@@ -6,17 +5,15 @@ import {
   FiBriefcase,
   FiUser,
   FiSettings,
-  FiSun,
-  FiMoon,
+  FiMessageSquare,
   FiLogOut,
+  FiBarChart2,
 } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
 import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   if (!user) return null;
@@ -28,32 +25,23 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* LEFT */}
       <div className="nav-left">
         <span className="logo" onClick={() => navigate("/feed")}>
-          CareerTrack
+          ProConnect
         </span>
       </div>
 
-      {/* CENTER */}
       <div className="nav-center">
-        <NavItem to="/feed" icon={<FiHome />} label="Feed" />
+        <NavItem to="/feed" icon={<FiHome />} label="Home" />
         <NavItem to="/jobs" icon={<FiBriefcase />} label="Jobs" />
+        <NavItem to="/messages" icon={<FiMessageSquare />} label="Messages" />
         <NavItem to="/projects" icon={<FiLayers />} label="Projects" />
+        <NavItem to="/analytics" icon={<FiBarChart2 />} label="Analytics" />
         <NavItem to="/profile" icon={<FiUser />} label="Profile" />
         <NavItem to="/settings" icon={<FiSettings />} label="Settings" />
       </div>
 
-      {/* RIGHT */}
       <div className="nav-right">
-        <button
-          className="icon-btn"
-          aria-label="Toggle theme"
-          onClick={toggleTheme}
-        >
-          {theme === "dark" ? <FiSun /> : <FiMoon />}
-        </button>
-
         <button
           className="icon-btn danger"
           aria-label="Logout"
@@ -65,8 +53,6 @@ export default function Navbar() {
     </nav>
   );
 }
-
-/* ---------- Nav Item ---------- */
 
 type NavItemProps = {
   to: string;
