@@ -1,57 +1,87 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
-import MainLayout from "./layouts/MainLayout";
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAppSelector } from './store/hooks'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { initAuth } from './store/slices/authSlice'
+import MainLayout from './components/layout/MainLayout'
+import AuthLayout from './components/layout/AuthLayout'
 
-import Feed from "./pages/Feed";
-import Jobs from "./pages/Jobs/Jobs";
-import Projects from "./pages/Projects";
-import Profile from "./pages/Profile";
-import Settings from "./pages/Settings/Settings";
-import Messages from "./pages/Messages";
-import Analytics from "./pages/Analytics";
+// Auth pages
+import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage'
+import ResetPasswordPage from './pages/auth/ResetPasswordPage'
+import VerifyEmailPage from './pages/auth/VerifyEmailPage'
 
-import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";
+// Main pages
+import FeedPage from './pages/feed/FeedPage'
+import ProfilePage from './pages/profile/ProfilePage'
+import EditProfilePage from './pages/profile/EditProfilePage'
+import ChatPage from './pages/chat/ChatPage'
+import WorkspacePage from './pages/workspace/WorkspacePage'
+import ProjectBoardPage from './pages/projects/ProjectBoardPage'
+import AdminPage from './pages/admin/AdminPage'
+import NotificationsPage from './pages/NotificationsPage'
+import ExplorePage from './pages/ExplorePage'
+import SettingsPage from './pages/SettingsPage'
+import AnalyticsPage from './pages/analytics/AnalyticsPage'
+import AIPage from './pages/ai/AIPage'
+import SearchPage from './pages/search/SearchPage'
+import CalendarPage from './pages/calendar/CalendarPage'
+import NotFoundPage from './pages/NotFoundPage'
 
-import ErrorBoundary from "./components/ErrorBoundary";
-import "./styles/globals.css";
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, loading } = useAppSelector(s => s.auth)
+  if (loading) return <div className="flex items-center justify-center h-screen"><div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" /></div>
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
+}
+
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useAppSelector(s => s.auth)
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin'
+  return isAdmin ? <>{children}</> : <Navigate to="/feed" replace />
+}
 
 export default function App() {
-  const { user } = useAuth();
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(initAuth() as any)
+  }, [])
 
   return (
-    <ErrorBoundary>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            user ? <Navigate to="/feed" replace /> : <Navigate to="/signin" replace />
-          }
-        />
+    <Routes>
+      {/* Auth routes */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+      </Route>
 
-        <Route
-          path="/signin"
-          element={user ? <Navigate to="/feed" replace /> : <Signin />}
-        />
-        <Route
-          path="/signup"
-          element={user ? <Navigate to="/feed" replace /> : <Signup />}
-        />
+      {/* Protected routes */}
+      <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+        <Route index element={<Navigate to="/feed" replace />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chat/:conversationId" element={<ChatPage />} />
+        <Route path="/workspaces" element={<WorkspacePage />} />
+        <Route path="/workspaces/:workspaceId" element={<WorkspacePage />} />
+        <Route path="/workspaces/:workspaceId/projects/:projectId" element={<ProjectBoardPage />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/ai" element={<AIPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/admin/*" element={<AdminRoute><AdminPage /></AdminRoute>} />
+      </Route>
 
-        <Route
-          element={user ? <MainLayout /> : <Navigate to="/signin" replace />}
-        >
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-        </Route>
-
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </ErrorBoundary>
-  );
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  )
 }

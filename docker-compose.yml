@@ -1,0 +1,107 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: careertrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: careertrack
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-careertrack_secret}
+      POSTGRES_DB: careertrack
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U careertrack"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - careertrack-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: careertrack-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - careertrack-net
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: careertrack-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - careertrack-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: careertrack-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://careertrack:${POSTGRES_PASSWORD:-careertrack_secret}@postgres:5432/careertrack
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      PORT: 8080
+    expose:
+      - "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - careertrack-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: careertrack-frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    networks:
+      - careertrack-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: careertrack-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - careertrack-net
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  careertrack-net:
+    driver: bridge
